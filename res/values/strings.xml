@@ -6,4 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="CAST_APP_NAME">HotC</string>
     <string name="media_route_menu_title">Play on&#8230;</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
