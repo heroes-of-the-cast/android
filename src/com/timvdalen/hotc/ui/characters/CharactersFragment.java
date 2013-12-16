@@ -1,4 +1,4 @@
-package com.timvdalen.hotc.characters;
+package com.timvdalen.hotc.ui.characters;
 
 import com.timvdalen.hotc.R;
 

@@ -11,12 +11,15 @@ import com.google.cast.MediaRouteAdapter;
 import com.google.cast.MediaRouteHelper;
 import com.google.cast.MediaRouteStateChangeListener;
 import com.google.cast.SessionError;
-import com.timvdalen.hotc.adventures.AdventuresFragment;
-import com.timvdalen.hotc.characters.CharactersFragment;
-import com.timvdalen.hotc.home.HomeFragment;
+import com.timvdalen.hotc.ui.adventures.AdventuresFragment;
+import com.timvdalen.hotc.ui.characters.CharactersFragment;
+import com.timvdalen.hotc.ui.home.HomeFragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,7 +30,6 @@ import android.support.v7.app.MediaRouteActionProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.media.MediaRouter.RouteInfo;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +55,15 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		String session_key = preferences.getString("session_key", null);
+		if(session_key == null){
+			Intent login = new Intent(this, LoginActivity.class);
+            startActivityForResult(login, 0);
+			finish();
+		}
+		
 		setContentView(R.layout.activity_home);
 
 		mMenuItems = new String[] { "Home", "Characters", "Adventures" };
@@ -110,6 +121,16 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		MediaRouteHelper.unregisterMediaRouteProvider(mCastContext);
 		mCastContext.dispose();
 		mCastContext = null;
+		if (mSession != null) {
+            try {
+                if (!mSession.hasStopped()) {
+                    mSession.endSession();
+                }
+            } catch (IOException e) {
+                //Failed to end session
+            }
+        }
+        mSession = null;
 		super.onDestroy();
 	}
 

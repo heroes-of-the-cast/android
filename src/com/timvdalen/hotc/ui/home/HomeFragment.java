@@ -1,4 +1,4 @@
-package com.timvdalen.hotc.home;
+package com.timvdalen.hotc.ui.home;
 
 import com.timvdalen.hotc.R;
 

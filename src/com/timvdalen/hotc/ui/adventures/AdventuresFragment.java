@@ -1,4 +1,4 @@
-package com.timvdalen.hotc.adventures;
+package com.timvdalen.hotc.ui.adventures;
 
 import com.timvdalen.hotc.R;
 
