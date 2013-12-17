@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_network">No network connection, please try again later</string>
+    <string name="error_unknown">Okay, so, I didn\'t think this was possible. I have no idea what went wrong.</string>
+    <string name="error_reserved_name">You can\'t register under this name</string>
+    <string name="error_name_taken">Now that is what I call bad timing. Someone snatched this name while you were registering it.</string>
+    
+</resources>

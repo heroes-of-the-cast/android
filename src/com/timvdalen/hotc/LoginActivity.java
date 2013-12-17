@@ -5,14 +5,18 @@ import java.io.IOException;
 import com.timvdalen.hotc.apihandler.APIHandler;
 import com.timvdalen.hotc.apihandler.NoNetworkException;
 import com.timvdalen.hotc.apihandler.error.APIException;
+import com.timvdalen.hotc.apihandler.error.LoginException;
+import com.timvdalen.hotc.apihandler.error.ReservedNameException;
+import com.timvdalen.hotc.apihandler.error.UserExistsException;
+import com.timvdalen.hotc.data.Session;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -20,6 +24,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -161,20 +166,39 @@ public class LoginActivity extends Activity{
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean>{
+		private Exception e;
+		
 		@Override
 		protected Boolean doInBackground(Void... params){
 			// Check if an account with this username exists
 			try{
 				if(!APIHandler.userexists(mUsername, LoginActivity.this)){
-					//TODO: Create account
+					APIHandler.usercreate(mUsername, mPassword, LoginActivity.this);
 				}
-				//TODO: Log in account
+				Session s = APIHandler.userlogin(mUsername, mPassword, LoginActivity.this);
+				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				preferences.edit().putString("session_key", s.getKey()).commit();
+				
+				return true;
 			}catch(NoNetworkException e){
-				//TODO: Notify user
+				//Notify user that there is no connection
+				this.e = e;
+			}catch(ReservedNameException e){
+				//The user tried to register with a reserved name
+				this.e = e;
+			}catch(UserExistsException e){
+				//The user tried to register with a registered name
+				//This can only happen if someone registers this name between the userexists and usercreate calls
+				this.e = e;
+			}catch(LoginException e){
+				//Credentials are wrong
+				this.e = e;
+			}catch(APIException e){
+				// /user/:name/exists can't throw errors according to the doc
+				this.e = e;
 			}catch(IOException e){
 				//TODO: Figure out if there's something that can fix this
-			}catch(APIException e){
-				//TODO: /user/:name/exists can't throw errors according to the doc
+				this.e = e;
 			}
 
 			return false;
@@ -186,11 +210,27 @@ public class LoginActivity extends Activity{
 			showProgress(false);
 
 			if(success){
-				//TODO: Save the acquired login key, re-open the main activity
+				//Succesfully logged in, get back to the main activity
 				finish();
 			}else{
-				mPasswordView.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				if(this.e != null){
+					//Figure out what went wrong
+					if(e instanceof NoNetworkException){
+						Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_no_network), Toast.LENGTH_SHORT).show();
+					}else if(e instanceof ReservedNameException){
+						mUsernameView.setError(getString(R.string.error_reserved_name));
+						mUsernameView.requestFocus();
+					}else if(e instanceof UserExistsException){
+						mUsernameView.setError(getString(R.string.error_name_taken));
+						mUsernameView.requestFocus();
+					}else if(e instanceof LoginException){
+						mPasswordView.setError(getString(R.string.error_incorrect_password));
+						mPasswordView.requestFocus();
+					}else{
+						//No idea
+						Toast.makeText(LoginActivity.this, getResources().getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 		}
 
