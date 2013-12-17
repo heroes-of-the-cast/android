@@ -42,6 +42,7 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	private String mTitle;
 
 	private ApplicationSession mSession;
 	private SessionListener mSessionListener;
@@ -55,6 +56,8 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		mTitle = getResources().getString(R.string.app_name);
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		String session_key = preferences.getString("session_key", null);
@@ -77,6 +80,7 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			public void onDrawerClosed(View view){
 				invalidateOptionsMenu();
+				getActionBar().setTitle(mTitle);
 			}
 
 			public void onDrawerOpened(View drawerView){
@@ -286,6 +290,8 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 			// Java is stupid
 			fragment = new HomeFragment();
 		}
+		
+		mTitle = mMenuItems[position];
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getSupportFragmentManager();

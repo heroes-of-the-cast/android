@@ -13,6 +13,7 @@ import com.timvdalen.hotc.data.Session;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -211,6 +212,8 @@ public class LoginActivity extends Activity{
 
 			if(success){
 				//Succesfully logged in, get back to the main activity
+				Intent main = new Intent(LoginActivity.this, HomeActivity.class);
+	            startActivityForResult(main, 0);
 				finish();
 			}else{
 				if(this.e != null){
