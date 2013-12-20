@@ -8,4 +8,10 @@
     <string name="media_route_menu_title">Play on&#8230;</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="charlist_empty">You don\'t have any characters</string>
+    <string name="char_add">Add character</string>
+    <string name="discard_label">Cancel</string>
+    <string name="save_label">Done</string>
+    <string name="title_activity_add_char">Add character</string>
+
 </resources>

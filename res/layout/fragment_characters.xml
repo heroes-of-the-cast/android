@@ -7,7 +7,31 @@
     <ListView
         android:id="@+id/listCharacters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
     </ListView>
+
+    <RelativeLayout
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="30dp" >
+
+        <ProgressBar
+            android:id="@+id/prgsCharload"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/txtNoChars"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:text="@string/charlist_empty"
+            android:gravity="center"
+            android:visibility="gone" >
+        </TextView>
+    </RelativeLayout>
 
 </LinearLayout>

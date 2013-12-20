@@ -35,6 +35,10 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity
+            android:name="com.timvdalen.hotc.ui.characters.AddCharActivity"
+            android:label="@string/title_activity_add_char" >
+        </activity>
     </application>
 
 </manifest>

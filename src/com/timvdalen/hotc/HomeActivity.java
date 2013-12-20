@@ -12,6 +12,7 @@ import com.google.cast.MediaRouteHelper;
 import com.google.cast.MediaRouteStateChangeListener;
 import com.google.cast.SessionError;
 import com.timvdalen.hotc.ui.adventures.AdventuresFragment;
+import com.timvdalen.hotc.ui.characters.AddCharActivity;
 import com.timvdalen.hotc.ui.characters.CharactersFragment;
 import com.timvdalen.hotc.ui.home.HomeFragment;
 
@@ -56,17 +57,17 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+
 		mTitle = getResources().getString(R.string.app_name);
-		
+
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		String session_key = preferences.getString("session_key", null);
 		if(session_key == null){
 			Intent login = new Intent(this, LoginActivity.class);
-            startActivityForResult(login, 0);
+			startActivityForResult(login, 0);
 			finish();
 		}
-		
+
 		setContentView(R.layout.activity_home);
 
 		mMenuItems = new String[] { "Home", "Characters", "Adventures" };
@@ -125,16 +126,16 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		MediaRouteHelper.unregisterMediaRouteProvider(mCastContext);
 		mCastContext.dispose();
 		mCastContext = null;
-		if (mSession != null) {
-            try {
-                if (!mSession.hasStopped()) {
-                    mSession.endSession();
-                }
-            } catch (IOException e) {
-                //Failed to end session
-            }
-        }
-        mSession = null;
+		if(mSession != null){
+			try{
+				if(!mSession.hasStopped()){
+					mSession.endSession();
+				}
+			}catch(IOException e){
+				// Failed to end session
+			}
+		}
+		mSession = null;
 		super.onDestroy();
 	}
 
@@ -153,7 +154,22 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	public boolean onPrepareOptionsMenu(Menu menu){
 		// Hide and show actions based on fragment/drawer
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		// menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+
+		if(drawerOpen){
+			// Hide all
+			menu.findItem(R.id.media_route_menu_item).setVisible(false);
+			menu.findItem(R.id.char_add).setVisible(false);
+		}else{
+			// TODO: Better switch
+			if(mTitle == "Home"){
+				menu.findItem(R.id.media_route_menu_item).setVisible(true);
+			}else if(mTitle == "Characters"){
+				menu.findItem(R.id.char_add).setVisible(true);
+			}else if(mTitle == "Adventures"){
+
+			}
+		}
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -165,6 +181,13 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 			return true;
 		}
 		// Handle the rest of the actions
+
+		switch(item.getItemId()){
+		case R.id.char_add:
+			Intent addchar = new Intent(this, AddCharActivity.class);
+            startActivityForResult(addchar, 0);
+			break;
+		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -290,7 +313,7 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 			// Java is stupid
 			fragment = new HomeFragment();
 		}
-		
+
 		mTitle = mMenuItems[position];
 
 		// Insert the fragment by replacing any existing fragment

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/edtName"
+        style="@style/TextAppearance.AddChar_Value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dip"
+        android:focusable="true"
+        android:hint="@string/addchar_form_name"
+        android:minHeight="48dip"
+        android:singleLine="true"
+        android:layout_marginBottom="12dp" >
+
+        <requestFocus />
+    </EditText>
+    
+    <LinearLayout
+        android:id="@+id/race_row"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp">
+        <TextView
+            android:id="@+id/lblRace"
+            android:text="@string/addchar_form_race"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AddChar_LabelSmall" />
+        <Spinner
+            android:id="@+id/spnRace"
+            style="@style/TextAppearance.AddChar_Spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:prompt="@string/addchar_form_race" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/class_row"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp">
+        <TextView
+            android:id="@+id/lblClass"
+            android:text="@string/addchar_form_class"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AddChar_LabelSmall" />
+        <Spinner
+            android:id="@+id/spnClass"
+            style="@style/TextAppearance.AddChar_Spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:prompt="@string/addchar_form_class" />
+    </LinearLayout>
+
+</LinearLayout>

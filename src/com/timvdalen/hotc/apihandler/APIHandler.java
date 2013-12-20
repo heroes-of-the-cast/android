@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -58,6 +60,12 @@ public class APIHandler{
 		
 		String ret = execute(Method.POST, "user/login", params, context);
 		return (new Gson()).fromJson(ret, Session.class);
+	}
+	
+	public static ArrayList<com.timvdalen.hotc.data.Character> usercharacters(String session_key, Context context) throws NoNetworkException, IOException, APIException{
+		String ret = execute(Method.GET, "user/me/character/list?session_key=" + session_key, context);
+		com.timvdalen.hotc.data.Character[] chararray = (new Gson()).fromJson(ret, com.timvdalen.hotc.data.Character[].class);
+		return new ArrayList<com.timvdalen.hotc.data.Character>(Arrays.asList(chararray));
 	}
 
 	private static String execute(Method method, String endpoint, Context context) throws NoNetworkException, IOException, APIException{

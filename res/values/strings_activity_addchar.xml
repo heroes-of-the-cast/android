@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="addchar_form_name">Character name</string>
+    <string name="addchar_form_race">Race</string>
+    <string name="addchar_form_class">Class</string>
+</resources>
