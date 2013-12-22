@@ -10,6 +10,7 @@ import com.timvdalen.hotc.apihandler.error.APIException;
 import com.timvdalen.hotc.apihandler.error.CharExistsException;
 import com.timvdalen.hotc.apihandler.error.LoginException;
 import com.timvdalen.hotc.apihandler.error.ReservedNameException;
+import com.timvdalen.hotc.data.StatModifyingProperty;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -44,6 +46,18 @@ public class AddCharActivity extends Activity{
 		actionbar.setDisplayShowHomeEnabled(false);
 		actionbar.setDisplayShowTitleEnabled(false);
 		actionbar.setDisplayShowCustomEnabled(true);
+		
+		StatModifyingPropertyAdapter raceAdapter = new StatModifyingPropertyAdapter(this, R.layout.statmodifyingproperty_item, new ArrayList<StatModifyingProperty>());
+		StatModifyingPropertyAdapter classAdapter = new StatModifyingPropertyAdapter(this, R.layout.statmodifyingproperty_item, new ArrayList<StatModifyingProperty>());
+		
+		Spinner raceSpinner = (Spinner) findViewById(R.id.spnRace);
+		Spinner classSpinner = (Spinner) findViewById(R.id.spnClass);
+		
+		raceSpinner.setAdapter(raceAdapter);
+		classSpinner.setAdapter(classAdapter);
+		
+		(new GetStatModifyingPropertyList(raceAdapter, true)).execute((Void) null);
+		(new GetStatModifyingPropertyList(classAdapter, false)).execute((Void) null);
 	}
 	
 	private void showProgress(boolean show){
@@ -71,9 +85,59 @@ public class AddCharActivity extends Activity{
 		}
 	}
 	
+	public class GetStatModifyingPropertyList extends AsyncTask<Void, Void, Boolean>{
+		private Exception e;
+		private StatModifyingPropertyAdapter adapter;
+		private StatModifyingProperty[] list;
+		private boolean type;
+		
+		public GetStatModifyingPropertyList(StatModifyingPropertyAdapter adapter, boolean type){
+			this.adapter = adapter;
+			this.type = type;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params){
+			try{
+				list = APIHandler.getpropertylist(type, AddCharActivity.this);
+				return true;
+			}catch(NoNetworkException e){
+				//Notify user that there is no connection
+				this.e = e;
+			}catch(APIException e){
+				// No APIExceptions possible after this point
+				this.e = e;
+			}catch(IOException e){
+				//TODO: Figure out if there's something that can fix this
+				this.e = e;
+			}
+			
+			return false;
+		}
+		
+		
+		@Override
+		protected void onPostExecute(final Boolean success){
+			if(success){
+				//Set adapter
+				adapter.addAll(list);
+				adapter.notifyDataSetChanged();
+			}else{
+				if(this.e != null){
+					//Figure out what went wrong
+					if(e instanceof NoNetworkException){
+						Toast.makeText(AddCharActivity.this, getResources().getString(R.string.error_no_network), Toast.LENGTH_SHORT).show();
+					}else{
+						//No idea
+						Toast.makeText(AddCharActivity.this, getResources().getString(R.string.error_unknown), Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
+	}
+	
 	public class CreateCharTask extends AsyncTask<Void, Void, Boolean>{
 		private Exception e;
-		private ArrayList<com.timvdalen.hotc.data.Character> chars;
 		
 		@Override
 		protected Boolean doInBackground(Void... params){

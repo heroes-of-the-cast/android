@@ -26,6 +26,7 @@ import com.timvdalen.hotc.apihandler.error.UserExistsException;
 import com.timvdalen.hotc.apihandler.error.UserNotFoundException;
 import com.timvdalen.hotc.apihandler.returntypes.APIReturnError;
 import com.timvdalen.hotc.data.Session;
+import com.timvdalen.hotc.data.StatModifyingProperty;
 import com.timvdalen.hotc.data.User;
 
 import android.content.Context;
@@ -66,6 +67,13 @@ public class APIHandler{
 		String ret = execute(Method.GET, "user/me/character/list?session_key=" + session_key, context);
 		com.timvdalen.hotc.data.Character[] chararray = (new Gson()).fromJson(ret, com.timvdalen.hotc.data.Character[].class);
 		return new ArrayList<com.timvdalen.hotc.data.Character>(Arrays.asList(chararray));
+	}
+	
+	public static StatModifyingProperty[] getpropertylist(boolean race, Context context) throws NoNetworkException, IOException, APIException{
+		//TODO: Enum for Race, Class
+		String type = race ? "race" : "class";
+		String ret = execute(Method.GET, "character/" + type + "/list", context);
+		return (new Gson()).fromJson(ret, StatModifyingProperty[].class);
 	}
 
 	public static com.timvdalen.hotc.data.Character charactercreate(String name, String race_alias, String class_alias, String session_key, Context context) throws NoNetworkException, IOException, APIException{

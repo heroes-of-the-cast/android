@@ -54,7 +54,6 @@
     <style name="TextAppearance.AddChar">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FF333333</item>
     </style>
 
     <style name="TextAppearance.AddChar_Value" parent="TextAppearance.AddChar">
@@ -66,7 +65,6 @@
 
     <style name="TextAppearance.AddChar_Spinner" parent="android:style/Widget.Holo.Spinner">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FF333333</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:layout_marginLeft">12dp</item>
     </style>
