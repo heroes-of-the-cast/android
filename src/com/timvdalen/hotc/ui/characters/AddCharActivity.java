@@ -1,8 +1,6 @@
 package com.timvdalen.hotc.ui.characters;
 
 import com.timvdalen.hotc.R;
-import com.timvdalen.hotc.R.id;
-import com.timvdalen.hotc.R.layout;
 
 import android.os.Bundle;
 import android.app.ActionBar;

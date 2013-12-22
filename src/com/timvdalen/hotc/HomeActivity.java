@@ -11,6 +11,7 @@ import com.google.cast.MediaRouteAdapter;
 import com.google.cast.MediaRouteHelper;
 import com.google.cast.MediaRouteStateChangeListener;
 import com.google.cast.SessionError;
+import com.timvdalen.hotc.ui.MainFragment;
 import com.timvdalen.hotc.ui.adventures.AdventuresFragment;
 import com.timvdalen.hotc.ui.characters.AddCharActivity;
 import com.timvdalen.hotc.ui.characters.CharactersFragment;
@@ -44,6 +45,8 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String mTitle;
+	
+	private MainFragment openFragment;
 
 	private ApplicationSession mSession;
 	private SessionListener mSessionListener;
@@ -106,6 +109,9 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		Fragment fragment = new HomeFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		
+		//Set visibility
+		invalidateOptionsMenu();
 	}
 
 	@Override
@@ -159,13 +165,15 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 			// Hide all
 			menu.findItem(R.id.media_route_menu_item).setVisible(false);
 			menu.findItem(R.id.char_add).setVisible(false);
+			menu.findItem(R.id.refresh).setVisible(false);
 		}else{
 			// TODO: Better switch
-			if(mTitle == "Home"){
+			if(mTitle.equals("Heroes of the Cast")){
 				menu.findItem(R.id.media_route_menu_item).setVisible(true);
-			}else if(mTitle == "Characters"){
+			}else if(mTitle.equals("Characters")){
 				menu.findItem(R.id.char_add).setVisible(true);
-			}else if(mTitle == "Adventures"){
+				menu.findItem(R.id.refresh).setVisible(true);
+			}else if(mTitle.equals("Adventures")){
 
 			}
 		}
@@ -186,6 +194,9 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		case R.id.char_add:
 			Intent addchar = new Intent(this, AddCharActivity.class);
             startActivityForResult(addchar, 0);
+			break;
+		case R.id.refresh:
+			openFragment.refresh();
 			break;
 		}
 
@@ -298,27 +309,33 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		// Create a new fragment and specify the planet to show based on
 		// position
 
-		Fragment fragment;
+		//TODO: Should I manually clean up the old one?
+		
 		switch(position){
 		case 0:
-			fragment = new HomeFragment();
+			openFragment = new HomeFragment();
 			break;
 		case 1:
-			fragment = new CharactersFragment();
+			openFragment = new CharactersFragment();
 			break;
 		case 2:
-			fragment = new AdventuresFragment();
+			openFragment = new AdventuresFragment();
 			break;
 		default:
 			// Java is stupid
-			fragment = new HomeFragment();
+			openFragment = new HomeFragment();
 		}
 
-		mTitle = mMenuItems[position];
+		//TODO: Much, much better way of handling open fragment
+		if(position == 0){
+			mTitle = "Heroes of the Cast";
+		}else{
+			mTitle = mMenuItems[position];
+		}
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().replace(R.id.content_frame, openFragment).commit();
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);

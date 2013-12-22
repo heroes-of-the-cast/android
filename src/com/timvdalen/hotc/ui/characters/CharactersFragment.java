@@ -3,22 +3,23 @@ package com.timvdalen.hotc.ui.characters;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.timvdalen.hotc.R;
-import com.timvdalen.hotc.apihandler.APIHandler;
-import com.timvdalen.hotc.apihandler.NoNetworkException;
-import com.timvdalen.hotc.apihandler.error.APIException;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class CharactersFragment extends Fragment{
+import com.timvdalen.hotc.R;
+import com.timvdalen.hotc.apihandler.APIHandler;
+import com.timvdalen.hotc.apihandler.NoNetworkException;
+import com.timvdalen.hotc.apihandler.error.APIException;
+import com.timvdalen.hotc.ui.MainFragment;
+
+public class CharactersFragment extends MainFragment{
 	View fragment;
 	private CharacterAdapter adapter;
 	
@@ -35,14 +36,27 @@ public class CharactersFragment extends Fragment{
 		
 		listCharacters.setEmptyView(fragment.findViewById(R.id.empty));
 		
-		(new GetCharsTask()).execute((Void) null);
+		refresh();
 		
 		return fragment;
 	}
 	
-	private void hideProgress(){
-		fragment.findViewById(R.id.prgsCharload).setVisibility(View.GONE);
-		fragment.findViewById(R.id.txtNoChars).setVisibility(View.VISIBLE);
+	@Override
+	public void refresh(){
+		hideProgress(false);
+		adapter.clear();
+		adapter.notifyDataSetChanged();
+		(new GetCharsTask()).execute((Void) null);
+	}
+	
+	private void hideProgress(boolean hide){
+		if(hide){
+			fragment.findViewById(R.id.prgsCharload).setVisibility(View.GONE);
+			fragment.findViewById(R.id.txtNoChars).setVisibility(View.VISIBLE);
+		}else{
+			fragment.findViewById(R.id.prgsCharload).setVisibility(View.VISIBLE);
+			fragment.findViewById(R.id.txtNoChars).setVisibility(View.GONE);
+		}
 	}
 	
 	public class GetCharsTask extends AsyncTask<Void, Void, Boolean>{
@@ -91,12 +105,12 @@ public class CharactersFragment extends Fragment{
 					}
 				}
 			}
-			hideProgress();
+			hideProgress(true);
 		}
 
 		@Override
 		protected void onCancelled(){
-			hideProgress();
+			hideProgress(true);
 		}
 	}
 }
