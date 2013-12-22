@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddCharActivity extends Activity{
+	public static final int RESULT_CANCEL = 2;
+	public static final int RESULT_ADDED = 3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -79,6 +81,7 @@ public class AddCharActivity extends Activity{
 				(new CreateCharTask()).execute((Void) null);
 				break;
 			case R.id.action_cancel:
+				setResult(RESULT_CANCEL);
 				finish();
 				break;
 			}
@@ -180,7 +183,8 @@ public class AddCharActivity extends Activity{
 		@Override
 		protected void onPostExecute(final Boolean success){
 			if(success){
-				//TODO: Trigger reload of character fragment
+				//Trigger reload of character fragment
+				setResult(RESULT_ADDED);
 				finish();
 			}else{
 				showProgress(false);

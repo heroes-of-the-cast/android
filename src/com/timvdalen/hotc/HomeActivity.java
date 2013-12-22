@@ -56,6 +56,8 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 	private MediaRouter mMediaRouter;
 	private MediaRouteSelector mMediaRouteSelector;
 	private MediaRouter.Callback mMediaRouterCallback;
+	
+	private static final int ADD_CHAR_RESULT = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -193,7 +195,7 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		switch(item.getItemId()){
 		case R.id.char_add:
 			Intent addchar = new Intent(this, AddCharActivity.class);
-            startActivityForResult(addchar, 0);
+            startActivityForResult(addchar, ADD_CHAR_RESULT);
 			break;
 		case R.id.refresh:
 			openFragment.refresh();
@@ -201,6 +203,18 @@ public class HomeActivity extends ActionBarActivity implements MediaRouteAdapter
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		switch(requestCode){
+		case ADD_CHAR_RESULT:
+			if(resultCode == AddCharActivity.RESULT_ADDED){
+				//TODO: Can there be a case where the open fragment is not the character fragment? And does that matter?
+				openFragment.refresh();
+			}
+			break;
+		}
 	}
 
 	@Override
