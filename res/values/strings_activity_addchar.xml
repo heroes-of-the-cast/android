@@ -3,4 +3,7 @@
     <string name="addchar_form_name">Character name</string>
     <string name="addchar_form_race">Race</string>
     <string name="addchar_form_class">Class</string>
+    <string name="addchar_create_message">Creating character&#8230;</string>
+    <string name="addchar_error_reserved">Name not valid</string>
+    <string name="addchar_error_exists">Name is taken</string>
 </resources>

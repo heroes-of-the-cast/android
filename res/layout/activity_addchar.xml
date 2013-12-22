@@ -4,59 +4,103 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/edtName"
-        style="@style/TextAppearance.AddChar_Value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dip"
-        android:focusable="true"
-        android:hint="@string/addchar_form_name"
-        android:minHeight="48dip"
-        android:singleLine="true"
-        android:layout_marginBottom="12dp" >
+    <!-- Loading bar -->
 
-        <requestFocus />
-    </EditText>
-    
     <LinearLayout
-        android:id="@+id/race_row"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:id="@+id/charcreate_status"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="6dp">
-        <TextView
-            android:id="@+id/lblRace"
-            android:text="@string/addchar_form_race"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            style="@style/TextAppearance.AddChar_LabelSmall" />
-        <Spinner
-            android:id="@+id/spnRace"
-            style="@style/TextAppearance.AddChar_Spinner"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:prompt="@string/addchar_form_race" />
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/class_row"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="6dp">
-        <TextView
-            android:id="@+id/lblClass"
-            android:text="@string/addchar_form_class"
-            android:layout_height="wrap_content"
+        android:visibility="gone" >
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
-            style="@style/TextAppearance.AddChar_LabelSmall" />
-        <Spinner
-            android:id="@+id/spnClass"
-            style="@style/TextAppearance.AddChar_Spinner"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:prompt="@string/addchar_form_class" />
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/charcreate_status_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/addchar_create_message"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+
+    <!-- Form -->
+
+    <ScrollView
+        android:id="@+id/charcreate_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/edtName"
+                style="@style/TextAppearance.AddChar_Value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="4dip"
+                android:focusable="true"
+                android:hint="@string/addchar_form_name"
+                android:minHeight="48dip"
+                android:singleLine="true" >
+
+                <requestFocus />
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/race_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="6dp" >
+
+                <TextView
+                    android:id="@+id/lblRace"
+                    style="@style/TextAppearance.AddChar_LabelSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addchar_form_race" />
+
+                <Spinner
+                    android:id="@+id/spnRace"
+                    style="@style/TextAppearance.AddChar_Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/addchar_form_race" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/class_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="6dp" >
+
+                <TextView
+                    android:id="@+id/lblClass"
+                    style="@style/TextAppearance.AddChar_LabelSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addchar_form_class" />
+
+                <Spinner
+                    android:id="@+id/spnClass"
+                    style="@style/TextAppearance.AddChar_Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/addchar_form_class" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

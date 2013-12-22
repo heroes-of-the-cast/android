@@ -48,30 +48,41 @@ public class APIHandler{
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("username", username);
 		params.put("password", password);
-		
+
 		String ret = execute(Method.POST, "user/create", params, context);
 		return (new Gson()).fromJson(ret, User.class);
 	}
-	
+
 	public static Session userlogin(String username, String password, Context context) throws NoNetworkException, IOException, APIException{
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("username", username);
 		params.put("password", password);
-		
+
 		String ret = execute(Method.POST, "user/login", params, context);
 		return (new Gson()).fromJson(ret, Session.class);
 	}
-	
+
 	public static ArrayList<com.timvdalen.hotc.data.Character> usercharacters(String session_key, Context context) throws NoNetworkException, IOException, APIException{
 		String ret = execute(Method.GET, "user/me/character/list?session_key=" + session_key, context);
 		com.timvdalen.hotc.data.Character[] chararray = (new Gson()).fromJson(ret, com.timvdalen.hotc.data.Character[].class);
 		return new ArrayList<com.timvdalen.hotc.data.Character>(Arrays.asList(chararray));
 	}
 
+	public static com.timvdalen.hotc.data.Character charactercreate(String name, String race_alias, String class_alias, String session_key, Context context) throws NoNetworkException, IOException, APIException{
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("name", name);
+		params.put("race", race_alias);
+		params.put("class", class_alias);
+		params.put("session_key", session_key);
+		
+		String ret = execute(Method.POST, "user/me/character/create", params, context);
+		return (new Gson()).fromJson(ret, com.timvdalen.hotc.data.Character.class);
+	}
+
 	private static String execute(Method method, String endpoint, Context context) throws NoNetworkException, IOException, APIException{
 		return execute(method, endpoint, null, context);
 	}
-	
+
 	private static String execute(Method method, String endpoint, HashMap<String, String> params, Context context) throws NoNetworkException, IOException, APIException{
 		InputStream is = null;
 
@@ -89,10 +100,10 @@ public class APIHandler{
 				conn.setConnectTimeout(15000 /* milliseconds */);
 				conn.setRequestMethod(method.toString());
 				conn.setDoInput(true);
-				
+
 				if(params != null){
 					conn.setDoOutput(true);
-					
+
 					OutputStream os = conn.getOutputStream();
 					BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 					writer.write(makeParams(params));
@@ -159,19 +170,19 @@ public class APIHandler{
 			return null;
 		}
 	}
-	
+
 	private static String makeParams(HashMap<String, String> params){
 		StringBuilder builder = new StringBuilder();
-		
+
 		Iterator<Entry<String, String>> it = params.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry<String, String> pairs = (Map.Entry<String, String>)it.next();
-	        builder.append(pairs.getKey() + "=" + pairs.getValue());
-	        if(it.hasNext()){
-	        	builder.append("&");
-	        }
-	    }
-		
+		while(it.hasNext()){
+			Map.Entry<String, String> pairs = (Map.Entry<String, String>) it.next();
+			builder.append(pairs.getKey() + "=" + pairs.getValue());
+			if(it.hasNext()){
+				builder.append("&");
+			}
+		}
+
 		return builder.toString();
 	}
 
